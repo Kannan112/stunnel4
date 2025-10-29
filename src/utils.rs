@@ -1,15 +1,15 @@
+use crate::stunnel::Connection;
+use nix::sys::signal::{self, Signal};
+use nix::unistd::Pid;
 use std::fs;
 use std::path::Path;
 use std::process::Command;
-use nix::sys::signal::{self, Signal};
-use nix::unistd::Pid;
-use crate::stunnel::Connection;
 
 /// Read the PID from a file and check if the process is running
 pub fn get_stunnel_pid(pid_file: &str) -> Result<i32, Box<dyn std::error::Error>> {
     let pid_content = fs::read_to_string(pid_file)?;
     let pid: i32 = pid_content.trim().parse()?;
-    
+
     // Check if process is running by sending signal 0
     match signal::kill(Pid::from_raw(pid), None) {
         Ok(_) => Ok(pid),
@@ -20,12 +20,10 @@ pub fn get_stunnel_pid(pid_file: &str) -> Result<i32, Box<dyn std::error::Error>
 /// Get active stunnel connections using netstat
 pub fn get_active_connections() -> Vec<Connection> {
     let mut connections = Vec::new();
-    
+
     // Run netstat to get TCP connections
-    let output = Command::new("netstat")
-        .args(&["-tnp"])
-        .output();
-    
+    let output = Command::new("netstat").args(&["-tnp"]).output();
+
     if let Ok(output) = output {
         let stdout = String::from_utf8_lossy(&output.stdout);
         for line in stdout.lines() {
@@ -43,7 +41,7 @@ pub fn get_active_connections() -> Vec<Connection> {
             }
         }
     }
-    
+
     connections
 }
 
@@ -52,12 +50,12 @@ pub fn validate_stunnel_config(config_path: &str) -> Result<(), Box<dyn std::err
     let output = Command::new("stunnel")
         .args(&["-fd", "0", "-test", config_path])
         .output()?;
-    
+
     if !output.status.success() {
         let error = String::from_utf8_lossy(&output.stderr);
         return Err(format!("Config validation failed: {}", error).into());
     }
-    
+
     Ok(())
 }
 
@@ -78,9 +76,7 @@ pub fn reload_stunnel(pid: i32) -> Result<(), Box<dyn std::error::Error>> {
 
 /// Start a new stunnel process
 pub fn start_stunnel(config_path: &str) -> Result<i32, Box<dyn std::error::Error>> {
-    let child = Command::new("stunnel")
-        .arg(config_path)
-        .spawn()?;
-    
+    let child = Command::new("stunnel").arg(config_path).spawn()?;
+
     Ok(child.id() as i32)
 }

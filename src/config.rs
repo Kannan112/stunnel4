@@ -1,6 +1,6 @@
 use std::env;
-use std::fmt;
 use std::error::Error;
+use std::fmt;
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -18,7 +18,7 @@ pub struct ConfigError {
 impl fmt::Display for ConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
-            f, 
+            f,
             "Missing required environment variables: {}",
             self.missing_vars.join(", ")
         )
@@ -59,8 +59,7 @@ impl Config {
         };
 
         // Get log level - OPTIONAL with default
-        let log_level = env::var("LOG_LEVEL")
-            .unwrap_or_else(|_| "info".to_string());
+        let log_level = env::var("LOG_LEVEL").unwrap_or_else(|_| "info".to_string());
 
         // If any required variables are missing, return error
         if !missing_vars.is_empty() {

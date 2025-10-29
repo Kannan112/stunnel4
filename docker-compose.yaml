@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  stunnel:
+    build:
+      context: .                # directory containing Dockerfile
+      dockerfile: Dockerfile    # optional, only if your Dockerfile has a custom name
+    container_name: vfxstunnel
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "50055:50055"               # gRPC port
+      - "50000-50010:50000-50010"   # stunnel service ports
+    volumes:
+      - ./certs/server.pem:/etc/stunnel/server.pem
+      - ./certs/server.crt:/etc/stunnel/server.crt
+      - ./stunnel.conf:/etc/stunnel/stunnel.conf
+
+    networks:
+      - hs_trader_network
+
+networks:
+  hs_trader_network:
+    name: hs_trader_network
+    driver: bridge
