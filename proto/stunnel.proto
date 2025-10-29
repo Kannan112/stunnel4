@@ -1,8 +1,7 @@
 syntax = "proto3";
 
-package stunnel;
+package vfxstunnel;
 
-// option go_package = "stunnel-manager/proto";
 
 service StunnelManager {
     rpc ReloadConfig(ReloadRequest) returns (ReloadResponse);
@@ -10,6 +9,7 @@ service StunnelManager {
     rpc UpdateConfig(UpdateConfigRequest) returns (UpdateConfigResponse);
     rpc GenerateConfig(GenerateConfigRequest) returns (GenerateConfigResponse);
     rpc AddProvider(AddProviderRequest) returns (AddProviderResponse);
+    rpc RemoveProvider(RemoveProviderRequest) returns (RemoveProviderResponse);
 }
 
 message ReloadRequest {
@@ -80,6 +80,17 @@ message AddProviderRequest {
 }
 
 message AddProviderResponse {
+    bool success = 1;
+    string message = 2;
+    string updated_config = 3;
+}
+
+message RemoveProviderRequest {
+    string provider_name = 1;
+    bool apply_immediately = 2;
+}
+
+message RemoveProviderResponse {
     bool success = 1;
     string message = 2;
     string updated_config = 3;
