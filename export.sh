@@ -9,20 +9,23 @@ export STUNNEL_CONFIG="$(pwd)/stunnel.conf"
 # Use /tmp for development PID file
 export STUNNEL_PID_FILE="/tmp/stunnel.pid"
 
-# gRPC server port for dev
-export GRPC_PORT="50055"
+# gRPC server host and port for dev
+export GRPC_HOST=127.0.0.1
+
+export GRPC_PORT=50055
 
 # App log level for dev
 export LOG_LEVEL="debug"
 
 # Certificate paths for stunnel services (used as global defaults in stunnel.conf)
 # Update these paths if your certs live elsewhere
-export CERT_FILE="/etc/stunnel/server.pem"
-export CA_FILE="/etc/stunnel/server.crt"
+export CERT_FILE="/etc/stunnel/certs/server.pem"
+export CA_FILE="/etc/stunnel/certs/server.crt"
 
 echo "Dev environment exported:"
 echo "  STUNNEL_CONFIG=$STUNNEL_CONFIG"
 echo "  STUNNEL_PID_FILE=$STUNNEL_PID_FILE"
+echo "  GRPC_HOST=$GRPC_HOST"
 echo "  GRPC_PORT=$GRPC_PORT"
 echo "  LOG_LEVEL=$LOG_LEVEL"
 echo "  CERT_FILE=$CERT_FILE"
