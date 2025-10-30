@@ -6,6 +6,7 @@ use std::fmt;
 pub struct Config {
     pub config_path: String,
     pub pid_file: String,
+    pub grpc_host: String,
     pub grpc_port: String,
     pub log_level: String,
 }
@@ -58,6 +59,9 @@ impl Config {
             }
         };
 
+        // Get gRPC host - OPTIONAL with default (bind all interfaces)
+        let grpc_host = env::var("GRPC_HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
+
         // Get log level - OPTIONAL with default
         let log_level = env::var("LOG_LEVEL").unwrap_or_else(|_| "info".to_string());
 
@@ -69,17 +73,19 @@ impl Config {
         Ok(Config {
             config_path,
             pid_file,
+            grpc_host,
             grpc_port,
             log_level,
         })
     }
 
     pub fn get_grpc_address(&self) -> String {
-        format!("[::]:{}", self.grpc_port)
+        format!("{}:{}", self.grpc_host, self.grpc_port)
     }
 
     pub fn print_config(&self) {
         println!("=== Server Configuration ===");
+        println!("gRPC Host: {}", self.grpc_host);
         println!("gRPC Port: {}", self.grpc_port);
         println!("Config Path: {}", self.config_path);
         println!("PID File: {}", self.pid_file);

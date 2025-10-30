@@ -15,6 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             eprintln!("\nPlease set the required environment variables:");
             eprintln!("  export STUNNEL_CONFIG=/path/to/stunnel.conf");
             eprintln!("  export STUNNEL_PID_FILE=/path/to/stunnel.pid");
+            eprintln!("  export GRPC_HOST=127.0.0.1");
             eprintln!("  export GRPC_PORT=50055");
             eprintln!("\nOr use: source export.sh");
             eprintln!("Or create a .env file from .env.example");
