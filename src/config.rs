@@ -33,10 +33,10 @@ impl Config {
         let mut missing_vars = Vec::new();
 
         // Get config path - REQUIRED
-        let config_path = match env::var("STUNNEL_CONFIG") {
+        let config_path = match env::var("STUNNEL_CONF_PATH") {
             Ok(path) => path,
             Err(_) => {
-                missing_vars.push("STUNNEL_CONFIG".to_string());
+                missing_vars.push("STUNNEL_CONF_PATH".to_string());
                 String::new()
             }
         };

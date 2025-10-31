@@ -59,7 +59,7 @@ docker build -t stunnel-manager .
 cargo run
 
 # Custom configuration
-STUNNEL_CONFIG=/path/to/stunnel.conf STUNNEL_PID_FILE=/path/to/stunnel.pid cargo run
+STUNNEL_CONF_PATH=/path/to/stunnel.conf STUNNEL_PID_FILE=/path/to/stunnel.pid cargo run
 ```
 
 ### Docker
@@ -142,7 +142,7 @@ run_server
 
 ### Option 3: Direct environment variables
 ```bash
-export STUNNEL_CONFIG=/path/to/stunnel.conf
+export STUNNEL_CONF_PATH=/path/to/stunnel.conf
 export STUNNEL_PID_FILE=/path/to/stunnel.pid
 export GRPC_PORT=8080
 cargo run
@@ -150,7 +150,7 @@ cargo run
 
 ### Available Variables
 
-- `STUNNEL_CONFIG`: Path to stunnel configuration file (default: `./stunnel.conf`)
+- `STUNNEL_CONF_PATH`: Path to stunnel configuration file (default: `./stunnel.conf`)
 - `STUNNEL_PID_FILE`: Path to stunnel PID file (default: `/tmp/stunnel.pid`)
 - `GRPC_PORT`: gRPC server port (default: `50055`)
 - `LOG_LEVEL`: Log level - debug, info, warn, error (default: `info`)

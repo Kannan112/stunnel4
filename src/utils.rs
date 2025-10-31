@@ -46,7 +46,7 @@ pub fn get_active_connections() -> Vec<Connection> {
 }
 
 /// Validate stunnel configuration file
-pub fn validate_stunnel_config(config_path: &str) -> Result<(), Box<dyn std::error::Error>> {
+pub fn validate_stunnel_conf_path(config_path: &str) -> Result<(), Box<dyn std::error::Error>> {
     let output = Command::new("stunnel")
         .args(&["-fd", "0", "-test", config_path])
         .output()?;
