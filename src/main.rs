@@ -13,7 +13,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Err(e) => {
             eprintln!("Configuration Error: {}", e);
             eprintln!("\nPlease set the required environment variables:");
-            eprintln!("  export STUNNEL_CONFIG=/path/to/stunnel.conf");
+            eprintln!("  export STUNNEL_CONF_PATH=/path/to/stunnel.conf");
             eprintln!("  export STUNNEL_PID_FILE=/path/to/stunnel.pid");
             eprintln!("  export GRPC_HOST=127.0.0.1");
             eprintln!("  export GRPC_PORT=50055");

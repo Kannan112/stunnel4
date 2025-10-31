@@ -12,7 +12,7 @@ use crate::stunnel::{
 };
 use crate::utils::{
     backup_file, get_active_connections, get_stunnel_pid, reload_stunnel, start_stunnel,
-    validate_stunnel_config,
+    validate_stunnel_conf_path,
 };
 
 #[derive(Debug, Clone)]
@@ -62,7 +62,7 @@ impl StunnelManager for StunnelServer {
 
         // Validate only if requested
         if req.validate_only {
-            match validate_stunnel_config(&config_path) {
+            match validate_stunnel_conf_path(&config_path) {
                 Ok(_) => {
                     return Ok(Response::new(ReloadResponse {
                         success: true,
@@ -189,7 +189,7 @@ impl StunnelManager for StunnelServer {
         }
 
         // Validate new config
-        if let Err(e) = validate_stunnel_config(&config_path) {
+        if let Err(e) = validate_stunnel_conf_path(&config_path) {
             // Restore backup
             match fs::copy(&backup_path, &config_path) {
                 Ok(_) => {
@@ -286,7 +286,7 @@ impl StunnelManager for StunnelServer {
         }
 
         // Validate the generated config (skip if stunnel not available)
-        if let Err(e) = validate_stunnel_config(&self.config_path) {
+        if let Err(e) = validate_stunnel_conf_path(&self.config_path) {
             println!(
                 "Warning: Config validation failed (stunnel may not be installed): {}",
                 e
@@ -404,7 +404,7 @@ impl StunnelManager for StunnelServer {
         }
 
         // Validate new config (skip if stunnel not available)
-        if let Err(e) = validate_stunnel_config(&self.config_path) {
+        if let Err(e) = validate_stunnel_conf_path(&self.config_path) {
             println!(
                 "Warning: Config validation failed (stunnel may not be installed): {}",
                 e
@@ -547,7 +547,7 @@ impl StunnelManager for StunnelServer {
         }
 
         // Validate new config (skip if stunnel not available)
-        if let Err(e) = validate_stunnel_config(&self.config_path) {
+        if let Err(e) = validate_stunnel_conf_path(&self.config_path) {
             println!(
                 "Warning: Config validation failed (stunnel may not be installed): {}",
                 e

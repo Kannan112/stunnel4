@@ -10,15 +10,13 @@ RUN apt-get update && apt-get install -y \
 # Copy binary and configs
 COPY ./target/release/stunnel-space /usr/local/bin/stunnel-manager
 COPY ./stunnel.conf /etc/stunnel/
-COPY ./cert/server.pem /etc/stunnel/certs/server.pem
-COPY ./cert/server.crt /etc/stunnel/certs/server.crt
 
-RUN chmod +x /usr/local/bin/stunnel-manager && \
-    chmod 600 /etc/stunnel/certs/server.pem && \
-    chmod 644 /etc/stunnel/certs/server.crt
+RUN chmod +x /usr/local/bin/stunnel-manager 
+    # chmod 600 /etc/stunnel/certs/server.pem && \
+    # chmod 644 /etc/stunnel/certs/server.crt
 
 WORKDIR /app
 
-EXPOSE 50055
+# EXPOSE 50055
 
 CMD ["/usr/local/bin/stunnel-manager"]
