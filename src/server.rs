@@ -267,7 +267,7 @@ impl StunnelManager for StunnelServer {
                 config_content.push_str("client = yes\n");
             }
 
-            config_content.push_str(&format!("accept = {}\n", provider.accept_port));
+            config_content.push_str(&format!("accept = :::{}\n", provider.accept_port));
             config_content.push_str(&format!(
                 "connect = {}:{}\n",
                 provider.connect_host, provider.connect_port
@@ -341,7 +341,7 @@ impl StunnelManager for StunnelServer {
             new_section.push_str("client = yes\n");
         }
 
-        new_section.push_str(&format!("accept = {}\n", provider.accept_port));
+        new_section.push_str(&format!("accept = :::{}\n", provider.accept_port));
         new_section.push_str(&format!(
             "connect = {}:{}\n",
             provider.connect_host, provider.connect_port
