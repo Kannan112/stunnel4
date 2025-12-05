@@ -25,9 +25,19 @@ jobs:
       run: |
         if [ "$RUNNER_OS" == "Linux" ]; then
           sudo apt-get update && sudo apt-get install -y protobuf-compiler
+          echo "Installed protoc version:"
+          protoc --version
         elif [ "$RUNNER_OS" == "macOS" ]; then
           brew install protobuf
+          echo "Installed protoc version:"
+          protoc --version
         fi
+      shell: bash
+    
+    - name: Verify protoc installation
+      run: |
+        which protoc || echo "protoc not found in PATH"
+        protoc --version || echo "protoc command failed"
       shell: bash
     
     - name: Install Rust
