@@ -1,6 +1,88 @@
-# Stunnel Space - Rust gRPC Manager for Stunnel
+# Stunnel Space - Zero-Downtime Stunnel Configuration Manager
 
-A Rust implementation of a gRPC-based stunnel configuration manager, providing programmatic control over stunnel instances.
+**A production-ready Rust gRPC manager for Stunnel that enables dynamic SSL/TLS tunnel configuration with zero downtime.**
+
+## Overview
+
+Stunnel Space provides programmatic control over stunnel instances through a modern gRPC API, allowing you to manage SSL/TLS tunnels dynamically without interrupting active connections. Built with Rust for reliability and performance, it's designed for production environments where uptime is critical.
+
+### Key Features
+
+- **🔄 Zero-Downtime Configuration**: Reload stunnel configurations without dropping active connections
+- **🚀 Dynamic Provider Management**: Add or remove SSL tunnel providers on-the-fly via gRPC
+- **📊 Real-Time Monitoring**: Track active connections and tunnel status
+- **🔒 Multi-Protocol Support**: IPv4, IPv6, or custom network configurations
+- **⚡ High Performance**: Built with Rust and async I/O for minimal overhead
+- **🐳 Container-Ready**: Docker support with multi-arch images (amd64, arm64)
+- **🔧 Validation Built-In**: Automatic configuration validation before applying changes
+
+## Use Cases
+
+### 1. **Microservices SSL Termination**
+Dynamically manage SSL/TLS termination for microservices without service interruption:
+```
+Client → Stunnel Space (manages) → Stunnel → Backend Services
+```
+- Add new services without downtime
+- Update SSL certificates on-the-fly
+- Monitor connection health in real-time
+
+### 2. **Legacy Application Modernization**
+Add SSL/TLS to legacy applications that don't support it natively:
+```
+Modern Clients (HTTPS) → Stunnel → Legacy App (HTTP)
+```
+- No code changes to legacy applications
+- Centralized SSL certificate management
+- Gradual migration path to modern protocols
+
+### 3. **Database Connection Security**
+Secure database connections across networks:
+```
+Application → Stunnel (client mode) → Stunnel (server mode) → Database
+```
+- Encrypt database traffic without application changes
+- Support for MySQL, PostgreSQL, MongoDB, etc.
+- Zero-downtime certificate rotation
+
+### 4. **Multi-Tenant SaaS Platforms**
+Dynamically provision SSL tunnels for new tenants:
+```
+Tenant A → Stunnel (port 5001) → Service A
+Tenant B → Stunnel (port 5002) → Service B
+```
+- Programmatic tunnel creation via API
+- Isolated connections per tenant
+- Real-time provisioning and deprovisioning
+
+### 5. **Cloud Migration & Hybrid Deployments**
+Bridge on-premise and cloud infrastructure securely:
+```
+Cloud Services ←→ Stunnel Space ←→ On-Premise Systems
+```
+- Secure communication across environments
+- Dynamic routing as services migrate
+- No downtime during infrastructure changes
+
+### 6. **IoT Device Management**
+Manage SSL tunnels for IoT device fleets:
+```
+IoT Devices → Stunnel (client) → Stunnel Space → Backend
+```
+- Centralized certificate management
+- Dynamic device onboarding/offboarding
+- Connection monitoring and health checks
+
+## Why Stunnel Space?
+
+| Challenge | Traditional Approach | Stunnel Space Solution |
+|-----------|---------------------|------------------------|
+| Configuration changes | Manual file edits + restart | gRPC API calls, zero downtime |
+| Adding new services | Service interruption required | Dynamic provider addition |
+| Monitoring | Parse log files manually | Real-time gRPC status queries |
+| Automation | Shell scripts + SSH | Modern gRPC API integration |
+| Validation | Trial and error | Built-in config validation |
+| Multi-environment | Separate configs per env | Branch-based configurations (v4/v6/main) |
 
 ## Branch Selection
 
