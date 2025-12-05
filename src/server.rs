@@ -84,7 +84,7 @@ impl StunnelManager for StunnelServer {
         match get_stunnel_pid(&self.pid_file) {
             Ok(pid) => {
                 // Ensure process is actually running before attempting reload
-                if process_running(pid as i32) {
+                if process_running(pid) {
                     // Send SIGHUP to reload configuration
                     match reload_stunnel(pid) {
                         Ok(_) => Ok(Response::new(ReloadResponse {
@@ -141,7 +141,7 @@ impl StunnelManager for StunnelServer {
             Ok(pid) => {
                 let connections = get_active_connections();
                 Ok(Response::new(StatusResponse {
-                    is_running: process_running(pid as i32),
+                    is_running: process_running(pid),
                     pid,
                     config_path: self.config_path.clone(),
                     active_connections: connections,
@@ -253,10 +253,9 @@ impl StunnelManager for StunnelServer {
         }
         if !req.ca_path.is_empty() {
             config_content.push_str(&format!("CAfile = {}\n", req.ca_path));
-            config_content.push_str("verify = 2\n");
         }
 
-        config_content.push_str("\n");
+        config_content.push('\n');
 
         // Add each provider as a service
         for provider in req.providers {
@@ -272,7 +271,7 @@ impl StunnelManager for StunnelServer {
                 "connect = {}:{}\n",
                 provider.connect_host, provider.connect_port
             ));
-            config_content.push_str("\n");
+            config_content.push('\n');
         }
 
         // Write to file atomically
@@ -350,7 +349,7 @@ impl StunnelManager for StunnelServer {
         // If global cert/CAfile/verify are present in existing config, copy them into the new service
         let mut cert_line: Option<String> = None;
         let mut cafile_line: Option<String> = None;
-        let mut verify_line: Option<String> = None;
+        // let mut verify_line: Option<String> = None;
 
         for line in existing_config.lines() {
             let trimmed = line.trim();
@@ -358,12 +357,10 @@ impl StunnelManager for StunnelServer {
                 cert_line = Some(trimmed.to_string());
             } else if cafile_line.is_none() && trimmed.starts_with("CAfile =") {
                 cafile_line = Some(trimmed.to_string());
-            } else if verify_line.is_none() && trimmed.starts_with("verify =") {
-                verify_line = Some(trimmed.to_string());
             }
-            if cert_line.is_some() && cafile_line.is_some() && verify_line.is_some() {
-                break;
-            }
+            // if cert_line.is_some() && cafile_line.is_some() && verify_line.is_some() {
+            //     break;
+            // }
         }
 
         if let Some(line) = cert_line {
@@ -371,10 +368,6 @@ impl StunnelManager for StunnelServer {
             new_section.push('\n');
         }
         if let Some(line) = cafile_line {
-            new_section.push_str(&line);
-            new_section.push('\n');
-        }
-        if let Some(line) = verify_line {
             new_section.push_str(&line);
             new_section.push('\n');
         }
@@ -416,7 +409,7 @@ impl StunnelManager for StunnelServer {
         if req.apply_immediately {
             if let Ok(pid) = get_stunnel_pid(&self.pid_file) {
                 // only reload if process exists
-                if process_running(pid as i32) {
+                if process_running(pid) {
                     let _ = reload_stunnel(pid);
                 }
             }
@@ -558,7 +551,7 @@ impl StunnelManager for StunnelServer {
         // Apply immediately if requested
         if req.apply_immediately {
             if let Ok(pid) = get_stunnel_pid(&self.pid_file) {
-                if process_running(pid as i32) {
+                if process_running(pid) {
                     let _ = reload_stunnel(pid);
                 }
             }

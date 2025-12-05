@@ -2,6 +2,26 @@
 
 A Rust implementation of a gRPC-based stunnel configuration manager, providing programmatic control over stunnel instances.
 
+## Branch Selection
+
+This project supports different network configurations across branches:
+
+- **`main`** - Custom/flexible configuration (recommended for most users)
+- **`v4`** - IPv4-only optimized version
+- **`v6`** - IPv6-only optimized version
+
+To switch branches:
+```bash
+# For IPv4 support
+git checkout v4
+
+# For IPv6 support
+git checkout v6
+
+# For custom/flexible configuration
+git checkout main
+```
+
 ## Project Structure
 
 ```

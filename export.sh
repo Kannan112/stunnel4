@@ -7,7 +7,7 @@
 export STUNNEL_CONF_PATH="$(pwd)/stunnel.conf"
 
 # Use /tmp for development PID file
-export STUNNEL_PID_FILE="/tmp/stunnel.pid"
+export STUNNEL_PID_FILE="/etc/stunnel/stunnel.pid"
 
 # gRPC server host and port for dev
 export GRPC_HOST=127.0.0.1
@@ -43,7 +43,7 @@ if [ -f "$STUNNEL_CONF_PATH" ]; then
   else
     echo "CAfile = $CA_FILE" >> "$STUNNEL_CONF_PATH"
   fi
-  if ! grep -q "^verify =" "$STUNNEL_CONF_PATH"; then
-    echo "verify = 2" >> "$STUNNEL_CONF_PATH"
-  fi
+  # if ! grep -q "^verify =" "$STUNNEL_CONF_PATH"; then
+  #   echo "verify = 2" >> "$STUNNEL_CONF_PATH"
+  # fi
 fi

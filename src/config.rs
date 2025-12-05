@@ -1,6 +1,17 @@
+//! Configuration management for stunnel-space.
+//!
+//! This module provides configuration loading and validation from environment variables,
+//! supporting both `.env` files and direct environment variable configuration.
+
 use std::env;
 use std::error::Error;
 use std::fmt;
+
+/// Configuration for the stunnel-space gRPC server.
+///
+/// This struct holds all configuration values needed to run the server,
+/// including paths to stunnel configuration and PID files, as well as
+/// gRPC server settings.
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -11,6 +22,9 @@ pub struct Config {
     pub log_level: String,
 }
 
+/// Error type returned when required configuration variables are missing.
+///
+/// Contains a list of all missing environment variable names.
 #[derive(Debug)]
 pub struct ConfigError {
     missing_vars: Vec<String>,
@@ -29,6 +43,34 @@ impl fmt::Display for ConfigError {
 impl Error for ConfigError {}
 
 impl Config {
+    /// Load configuration from environment variables.
+    ///
+    /// # Required Environment Variables
+    ///
+    /// - `STUNNEL_CONF_PATH`: Path to stunnel configuration file
+    /// - `STUNNEL_PID_FILE`: Path to stunnel PID file
+    /// - `GRPC_PORT`: gRPC server port
+    ///
+    /// # Optional Environment Variables
+    ///
+    /// - `GRPC_HOST`: gRPC server host (default: "0.0.0.0")
+    /// - `LOG_LEVEL`: Log level (default: "info")
+    ///
+    /// # Errors
+    ///
+    /// Returns `ConfigError` if any required variables are missing.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// use stunnel_space::Config;
+    ///
+    /// std::env::set_var("STUNNEL_CONF_PATH", "/etc/stunnel/stunnel.conf");
+    /// std::env::set_var("STUNNEL_PID_FILE", "/var/run/stunnel.pid");
+    /// std::env::set_var("GRPC_PORT", "50055");
+    ///
+    /// let config = Config::from_env().expect("Failed to load config");
+    /// ```
     pub fn from_env() -> Result<Self, ConfigError> {
         let mut missing_vars = Vec::new();
 
@@ -79,10 +121,28 @@ impl Config {
         })
     }
 
+    /// Returns the formatted gRPC server address.
+    ///
+    /// Combines `grpc_host` and `grpc_port` into a single address string
+    /// suitable for binding the gRPC server.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use stunnel_space::Config;
+    /// # std::env::set_var("STUNNEL_CONF_PATH", "/etc/stunnel.conf");
+    /// # std::env::set_var("STUNNEL_PID_FILE", "/var/run/stunnel.pid");
+    /// # std::env::set_var("GRPC_PORT", "50055");
+    /// let config = Config::from_env().unwrap();
+    /// assert_eq!(config.get_grpc_address(), "0.0.0.0:50055");
+    /// ```
     pub fn get_grpc_address(&self) -> String {
         format!("{}:{}", self.grpc_host, self.grpc_port)
     }
 
+    /// Prints the current configuration to stdout.
+    ///
+    /// Useful for debugging and verifying configuration on startup.
     pub fn print_config(&self) {
         println!("=== Server Configuration ===");
         println!("gRPC Host: {}", self.grpc_host);
